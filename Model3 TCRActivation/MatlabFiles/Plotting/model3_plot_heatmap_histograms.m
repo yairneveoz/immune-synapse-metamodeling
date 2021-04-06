@@ -1,4 +1,4 @@
-% model3_heatmap_histograms_plot
+% model3_plot_heatmap_histograms
 clc
 %% read data:
 % read rTCR historgrams 3D array:

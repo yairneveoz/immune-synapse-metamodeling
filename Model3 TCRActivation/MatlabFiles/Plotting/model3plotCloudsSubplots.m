@@ -83,11 +83,6 @@ axis_off = 0;
     R_max = 100;
     %%% CD45 decay:
     CD45_decay_length_nm = 10;
-% 
-%     CD45_double_decay = model3DoubleDecay(...
-%         CD45_decay_length_nm, pixel_size, x_pixels);
-%     norm_CD45_double_decay = CD45_double_decay/sum(CD45_double_decay);
-% 
     CD45_decay_disk = decayDisk(...
         CD45_decay_length_nm,pixel_size,R_max);
     norm_CD45_decay_disk = CD45_decay_disk/sum(sum(CD45_decay_disk));

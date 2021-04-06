@@ -1,4 +1,5 @@
-% model3_plot_1x3
+% model3_plot_1p5x4
+clear
 clc
 %% molecules colors: %%%%%%%%%%%%%%%%%%
 TCR_color  = [0.0, 0.6, 0.0];
@@ -36,8 +37,8 @@ CD45_r2 = CD45_r1 + 0.3; % nm 0.3
 [TCR_x_pixels0,TCR_y_pixels0] = radialDistributionArray(...
     TCR_cluster_density,TCR_r1,TCR_r2,pixel_size,...
     array_size_x_microns,array_size_y_microns);
-TCR_x_pixels = TCR_x_pixels0;% - 100*array_size_x_microns/1;
-TCR_y_pixels = TCR_y_pixels0;% - 100*array_size_y_microns/1;
+TCR_x_pixels = TCR_x_pixels0;
+TCR_y_pixels = TCR_y_pixels0;
 
 %%% TCR_locations_array:
 TCR_locations_array = zeros(array_size_x_pixels,...
