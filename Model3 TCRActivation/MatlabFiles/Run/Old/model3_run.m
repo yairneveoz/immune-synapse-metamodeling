@@ -11,11 +11,11 @@ dep_decay_pTCR_normalized_counts = zeros(N_dep,N_dec,N_bins);
 
 % N_bins = 200;
 for dep_ind = 1:length(batch_depletion_range_nm)
-    for dl_ind = 1:length(batch_aLCK_decay_length_nm)
+    for dec_ind = 1:length(batch_aLCK_decay_length_nm)
         disp(dep_ind)
-        disp(dl_ind)
+        disp(dec_ind)
         depletion_range_nm = batch_depletion_range_nm(dep_ind);
-        decay_length_nm = batch_aLCK_decay_length_nm(dl_ind);
+        decay_length_nm = batch_aLCK_decay_length_nm(dec_ind);
         
         %% decay_disk: %%%%%%%%%%%%%%%%%%%%%%%%
         decay_disk = model3_decayDisk(decay_length_nm,pixel_size,R_max);
@@ -77,9 +77,9 @@ for dep_ind = 1:length(batch_depletion_range_nm)
             10*mean_pTCR_normalized_counts_array)
         hold off
         
-        dep_decay_TCR_normalized_counts(dep_ind,dl_ind,:) = ...
+        dep_decay_TCR_normalized_counts(dep_ind,dec_ind,:) = ...
             mean_TCR_normalized_counts_array;
-        dep_decay_pTCR_normalized_counts(dep_ind,dl_ind,:) = ...
+        dep_decay_pTCR_normalized_counts(dep_ind,dec_ind,:) = ...
             mean_pTCR_normalized_counts_array;
             
     end

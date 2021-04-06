@@ -1,4 +1,4 @@
-function [x,y] = makeRadialCluster2(D,r1,r2)
+function [x,y] = model3_makeRadialCluster2(D,r1,r2)
 
 N = round(D*pi*(r2^2 - r1^2));
 rand_x = r2*rand(10*N,1);
