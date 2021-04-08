@@ -140,7 +140,7 @@ for dep_ind = 1:length(batch_depletion_range_nm)
             
             figure(2)
             
-            h1 = surf(aLck_probability_array' - 1);
+            h1 = surf(pTCR_probability_array' - 1);
             h1.EdgeColor = 'none';
             h1.FaceAlpha = 1.0;
             colormap default

@@ -1,4 +1,5 @@
 % model3_plot_heatmap_histograms2
+clear
 clc
 %% read data:
 % read rTCR historgrams 3D array:
@@ -239,26 +240,18 @@ if vertical_heatmaps
 end 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% plot rTCR histograms accordind to heatmap coordinates:
-model3plotrTCRHistSubplots(5,3,samples_data,rTCR_hist_model3);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% plot Points Subplots: %%%%%%%%%%%%%%
-model3plotPointsSubplots(5,3,samples_data);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% plot Clouds Subplots: %%%%%%%%%%%%%%
-model3plotCloudsSubplots(5,3,samples_data);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% plot Points and clouds Subplots: %%%
-model3plotPointsCloudsSubplots(5,3,samples_data);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% plot TCR phos Subplots: %%%
-model3plotTCRphosSubplots(5,3,samples_data);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% plot all subplots: %%%%%%%%%%%%%%%%%
+model3plotAllSubplots(N_rows,N_cols)
+%
+%% plot clouds array: %%%%%%%%%%%%%%%%%
+model3plotCloudsArray(N_rows,N_cols)
+%
+%% plot TCR phos array: %%%%%%%%%%%%%%%
+model3plotTCRphosArray(N_rows,N_cols)
+%
+%% plot TCR phos histogram array: %%%%%
+model3plotTCRphosHistArray(N_rows,N_cols,rTCR_hist_model3)
+%
 %% contours:
 % v = [0.0005:0.0005:0.003];
 % [h2,c2] = contour(rTCR_max_diff_heatmap,v,'ShowText','on');
@@ -273,4 +266,24 @@ model3plotTCRphosSubplots(5,3,samples_data);
 % BDmatrixq = interp2(xrow,ycol,BDmatrix,xq,yq,'cubic');
 % [c,h]=contourf(xq,yq,BDmatrixq);
 
+%% Old %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% plot rTCR histograms accordind to heatmap coordinates:
+% model3plotrTCRHistSubplots(5,3,samples_data,rTCR_hist_model3);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% plot Points Subplots: %%%%%%%%%%%%%%
+% model3plotPointsSubplots(5,3,samples_data);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% plot Clouds Subplots: %%%%%%%%%%%%%%
+% model3plotCloudsSubplots(5,3,samples_data);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% plot Points and clouds Subplots: %%%
+% model3plotPointsCloudsSubplots(5,3,samples_data);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% plot TCR phos Subplots: %%%
+% model3plotTCRphosSubplots(5,3,samples_data);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

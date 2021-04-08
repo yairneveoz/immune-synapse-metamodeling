@@ -1,7 +1,7 @@
 function [x_pixels,y_pixels] = radialDistributionArray(...
     D,r1,r2,a,array_size_x_microns,array_size_y_microns)
 % number of point as a function of density and area:
-N = round(D*pi*(r2^2 - r1^2));
+N = round(D*pi*(r2.^2 - r1.^2));
 
 % P_r,
 %% microns to pixels:
@@ -23,8 +23,8 @@ center_y_pixels = ceil(array_size_y_pixels/2);
 %% select full ring:
 all_ring_locations = pixels_array;
 all_ring_locations(...
-    (X - center_x_pixels).^2 + (Y - center_y_pixels).^2 > r1_pixels^2 &...
-    (X - center_x_pixels).^2 + (Y - center_y_pixels).^2 < r2_pixels^2) = 1;
+    (X - center_x_pixels).^2 + (Y - center_y_pixels).^2 > r1_pixels.^2 &...
+    (X - center_x_pixels).^2 + (Y - center_y_pixels).^2 < r2_pixels.^2) = 1;
 
 %% selct N random points from the selected ring:
 linind_ones = find(all_ring_locations);
