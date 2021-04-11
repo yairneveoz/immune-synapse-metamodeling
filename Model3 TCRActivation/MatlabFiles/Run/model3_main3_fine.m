@@ -52,7 +52,11 @@ dep_decay_rTCR_normalized_counts = ...
         dep_decay_pTCR_normalized_counts./...
         dep_decay_TCR_normalized_counts;
     
+save('rTCR_hist_model3_negativeDep.mat', 'dep_decay_rTCR_normalized_counts');
 dlmwrite('rTCR_hist_model3_negativeDep.m', dep_decay_rTCR_normalized_counts);
+dlmwrite('rTCR_hist_model3_negativeDep', dep_decay_rTCR_normalized_counts);
+dlmwrite('rTCR_hist_model3_negativeDep.npy', dep_decay_rTCR_normalized_counts);
+
 %% save results:
 if false % true
     save('TCR_hist_model3_fine2.mat', 'dep_decay_TCR_normalized_counts');

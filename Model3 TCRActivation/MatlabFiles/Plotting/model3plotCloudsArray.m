@@ -1,4 +1,4 @@
-function model3plotCloudsArray(N_rows,N_cols)
+function model3plotCloudsArray()
 
 %% doc: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %{
@@ -24,8 +24,9 @@ Nc = 64;
 magenta_fixed_colormap = magentaFixedColormap(Nc);
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% N_cols = 5;
-% N_rows = 6;
+N_cols = 5;
+N_rows = 6;
+
 % subplots and gaps sizes (relative to the figure size):
 gapx0 = 0.12; % relative initial gap on the left.
 gapy0 = 0.125; % relative initial gap on the bottom.
@@ -61,6 +62,9 @@ pixel_size = 10; % nm
 % TCR_y_pixels = TCR_y_pixels0 - 100*array_size_y_microns/2;
 
 %% start subplots loops: %%%%%%%%%%%%%%
+N_rows = 6;
+N_cols = 5;
+
 depletions = [-250,0:10:200];
 decayLengths = 10:10:200;
 

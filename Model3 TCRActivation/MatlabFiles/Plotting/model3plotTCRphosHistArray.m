@@ -1,4 +1,5 @@
-function model3plotTCRphosHistArray(N_rows,N_cols,rTCR_hist_model3)
+function model3plotTCRphosHistArray(rTCR_hist_model3,...
+    rTCR_hist_model3_negativeDep)
 
 %% doc: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %{
@@ -18,16 +19,13 @@ Output:
 r = 1:size(rTCR_hist_model3,3);
 
 %% colors and colormaps: %%%%%%%%%%%%%%
-% TCR_color = [0.0, 0.6, 0.0];
-% CD45_color = [1.0, 0.0, 0.0];
-
-green_fixed_colormap = greenFixedColormap(64);
-% orange_gray_colormap = orangeGrayColormap();
-% parula_gray_colormap = parulaGrayColormap();
+Nc = 64;
+orange_fixed_colormap = orangeFixedColormap(Nc);
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% N_cols = 5;
-% N_rows = 6;
+N_rows = 6;
+N_cols = 5;
+
 % subplots and gaps sizes (relative to the figure size):
 gapx0 = 0.12; % relative initial gap on the left.
 gapy0 = 0.125; % relative initial gap on the bottom.
@@ -40,12 +38,6 @@ size_y = 0.75/N_rows; % relative subplots y size.
 origins_x = gapx0 + (size_x+gapx)*[0:N_cols-1];
 origins_y = gapy0 + (size_y+gapy)*[0:N_rows-1];
 
-% limits:
-lim1 = 50;
-xmin = -lim1;
-xmax = lim1;
-ymin = -lim1;
-ymax = lim1;
 %
 %% array sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 array_size_x_microns = 2;
@@ -54,19 +46,19 @@ array_size_y_microns = 2;
 array_size_x_pixels = array_size_x_microns*100;
 array_size_y_pixels = array_size_y_microns*100;
 %
-%% TCR_locations %%%%%%%%%%%%%%%%%%%%%%
-TCR_cluster_density = 1000;
-TCR_r1 = 0;
-TCR_r2 = 0.25; % microns
-pixel_size = 10; % nm
-
-%%% create TCR locations: %%%%%%%%%%%%%
-[TCR_x_pixels0,TCR_y_pixels0] = radialDistributionArray(...
-    TCR_cluster_density,TCR_r1,TCR_r2,pixel_size,...
-    array_size_x_microns,array_size_y_microns);
-
-TCR_x_pixels = TCR_x_pixels0 - array_size_x_pixels/2;
-TCR_y_pixels = TCR_y_pixels0 - array_size_y_pixels/2;
+% %% TCR_locations %%%%%%%%%%%%%%%%%%%%%%
+% TCR_cluster_density = 1000;
+% TCR_r1 = 0;
+% TCR_r2 = 0.25; % microns
+% pixel_size = 10; % nm
+% 
+% %%% create TCR locations: %%%%%%%%%%%%%
+% [TCR_x_pixels0,TCR_y_pixels0] = radialDistributionArray(...
+%     TCR_cluster_density,TCR_r1,TCR_r2,pixel_size,...
+%     array_size_x_microns,array_size_y_microns);
+% 
+% TCR_x_pixels = TCR_x_pixels0 - array_size_x_pixels/2;
+% TCR_y_pixels = TCR_y_pixels0 - array_size_y_pixels/2;
 
 %% start subplots loops: %%%%%%%%%%%%%%
 depletions = [-250,0:10:200];
@@ -84,6 +76,7 @@ set(gcf, 'Units', 'pixels',...
     
 axis_off = 1;
 lim1 = 30; % 100
+max_h = 0.12;
 
 for col_ind = 1:N_cols
     for row_ind = 1:N_rows-1
@@ -112,7 +105,7 @@ for col_ind = 1:N_cols
             rTCR_hist(2);
 
         % bar plot:
-        bar(rr2, rTCR_hist2,1,'FaceColor',[1.0, 0.6, 0],...
+        bar(rr2, rTCR_hist2,1,'FaceColor',[1.0, 0.5, 0],...
             'EdgeColor','none')    
         %% mark Exp and Mean %%%%%%%%%%%%%%%%%%%%
         % rTCR_Exp:
@@ -127,9 +120,9 @@ for col_ind = 1:N_cols
 
         plot([-25 25],...
             [rTCR_mean rTCR_mean],'-',...
-            'Color',[1.0, 0.0, 1.0],'LineWidth',0.5)
+            'Color',[0.0, 0.0, 1.0],'LineWidth',0.5)
 
-        plot(rTCR_Exp,0.004,'v',...
+        plot(rTCR_Exp,0.01,'v',...
             'MarkerSize',6,...
             'MarkerEdgeColor',[0.0, 0.0, 1.0],...
             'MarkerFaceColor',[0.0, 0.0, 1.0])
@@ -139,7 +132,7 @@ for col_ind = 1:N_cols
 %         text(-27,0.05,iname,'FontWeight', 'Bold')
         xlim([-lim1 lim1])
     %     xlim([-30 30])
-        ylim([0 0.06])
+        ylim([0 max_h])
     %     xticks([-30:10:30]);
     %     xticklabels(10*[-30:10:30])
         xticks([-25:25:25]);
@@ -154,4 +147,73 @@ for col_ind = 1:N_cols
     end
 end
 
+%% negative dep: %%%%%%%%%%%%%%%%%%%%%%
+
+for col_ind = 1:N_cols
+    for row_ind = 1:1 %N_rows-1:N_rows-1
+
+        % index of depletion value:
+%         idep = s_dep_ind(row_ind);
+        % index of decay_length value:
+
+        idec = s_dec_ind(col_ind);
+
+        % name (letter) of point
+        % iname = samples_data(s2).name;
+
+        pos1 = ([origins_x(col_ind),...
+                 origins_y(row_ind+0),...
+                 size_x, size_y]); % N_rows+1 - 
+
+        h1 = subplot('Position',pos1);
+
+        %% plot TCR phos hist: %%%%%%%%
+        % 3D array to 1D:
+
+        rTCR_hist = squeeze(rTCR_hist_model3_negativeDep(1,idec,:));
+        rr2 = [-fliplr(r),0,r];
+        rTCR_hist2 = [flipud(rTCR_hist);0;rTCR_hist];
+        rTCR_hist2(length(r)-2:1:length(r)+2) = ...
+            rTCR_hist(2);
+        
+        % bar plot:
+        bar(rr2, rTCR_hist2,1,'FaceColor',[1.0, 0.5, 0],...
+            'EdgeColor','none')    
+        %% mark Exp and Mean %%%%%%%%%%%%%%%%%%%%
+        % rTCR_Exp:
+        rTCR_Exp = sum(rTCR_hist.*r')/sum(rTCR_hist);
+
+        % rTCR_mean:
+        % TODO: fix this (25-1)
+        rTCR_mean = sum(rTCR_hist)/(25-1); % !!!
+
+        hold on
+        % plot location of mean h:
+        plot([-25 25],...
+            [rTCR_mean rTCR_mean],'-',...
+            'Color',[0.0, 0.0, 1.0],'LineWidth',0.5)
+        
+        % plot location of mean r:
+        plot(rTCR_Exp,0.01,'v',...
+            'MarkerSize',6,...
+            'MarkerEdgeColor',[0.0, 0.0, 1.0],...
+            'MarkerFaceColor',[0.0, 0.0, 1.0])
+
+        hold off
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         text(-27,0.05,iname,'FontWeight', 'Bold')
+        xlim([-lim1 lim1])
+        ylim([0 max_h]) % 0.06
+        xticks([-25:25:25]);
+        xticklabels(10*[-25:25:25])
+
+        %%
+        if axis_off
+            set(gca,'xtick',[],'ytick',[])
+            set(gca,'xlabel',[],'ylabel',[])
+        end
+
+    end
+end
+%
 end

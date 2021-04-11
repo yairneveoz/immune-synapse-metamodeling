@@ -1,6 +1,6 @@
 % model3_run
 
-N_dep   = length(batch_depletion_range_nm);
+N_dep = length(batch_depletion_range_nm);
 N_dec = length(batch_aLCK_decay_length_nm);
 
 TCR_normalized_counts_array  =  zeros(N_samples,N_bins);

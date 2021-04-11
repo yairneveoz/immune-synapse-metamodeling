@@ -12,12 +12,11 @@ rTCR_hist_model3(isnan(rTCR_hist_model3)) = 0;
 
 %% rTCR histogram negative Dep:
 rTCR_hist_model3_negativeDep_3D = load('rTCR_hist_model3_negativeDep');
-rTCR_hist_model3_negativeDep = ...
-    rTCR_hist_model3_negativeDep_3D.dep_decay_rTCR_normalized_counts;
+rTCR_hist_model3 = ...
+    rTCR_hist_model3_3D.dep_decay_rTCR_normalized_counts;
 
 % asign NaN to 0:
-rTCR_hist_model3_negativeDep(...
-    isnan(rTCR_hist_model3_negativeDep)) = 0;
+rTCR_hist_model3(isnan(rTCR_hist_model3)) = 0;
 
 %% calculate heatmaps:
 [rTCR_mean_array,rTCR_Exp_array] = ...

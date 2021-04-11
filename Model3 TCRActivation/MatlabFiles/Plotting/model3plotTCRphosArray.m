@@ -1,4 +1,4 @@
-function model3plotTCRphosArray(N_rows,N_cols)
+function model3plotTCRphosArray()
 
 %% doc: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %{
@@ -24,8 +24,9 @@ green_fixed_colormap = greenFixedColormap(Nc);
 parula_gray_colormap = parulaGrayColormap(Nc);
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% N_cols = 5;
-% N_rows = 6;
+N_cols = 5;
+N_rows = 6;
+
 % subplots and gaps sizes (relative to the figure size):
 gapx0 = 0.12; % relative initial gap on the left.
 gapy0 = 0.125; % relative initial gap on the bottom.
@@ -38,12 +39,6 @@ size_y = 0.75/N_rows; % relative subplots y size.
 origins_x = gapx0 + (size_x+gapx)*[0:N_cols-1];
 origins_y = gapy0 + (size_y+gapy)*[0:N_rows-1];
 
-% limits:
-lim1 = 50;
-xmin = -lim1;
-xmax = lim1;
-ymin = -lim1;
-ymax = lim1;
 %
 %% array sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 array_size_x_microns = 2;

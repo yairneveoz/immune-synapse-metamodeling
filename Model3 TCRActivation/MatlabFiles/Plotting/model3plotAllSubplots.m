@@ -1,4 +1,4 @@
-function model3plotAllSubplots(N_rows,N_cols)
+function model3plotAllSubplots()
 
 %% doc: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %{
@@ -21,8 +21,9 @@ CD45_color = [1.0, 0.0, 0.0];
 % parula_gray_colormap = parulaGrayColormap();
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% N_cols = 5;
-% N_rows = 6;
+N_cols = 5;
+N_rows = 6;
+
 % subplots and gaps sizes (relative to the figure size):
 gapx0 = 0.12; % relative initial gap on the left.
 gapy0 = 0.125; % relative initial gap on the bottom.
