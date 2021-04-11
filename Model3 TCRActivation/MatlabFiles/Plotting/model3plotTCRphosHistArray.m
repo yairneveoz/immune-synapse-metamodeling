@@ -19,8 +19,12 @@ Output:
 r = 1:size(rTCR_hist_model3,3);
 
 %% colors and colormaps: %%%%%%%%%%%%%%
+aLck_color = [1.0, 0.5, 0];
+pTCR_color = [1.0, 0.0, 1.0];
+
 Nc = 64;
 orange_fixed_colormap = orangeFixedColormap(Nc);
+magenta_fixed_colormap = magentaFixedColormap(Nc);
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 N_rows = 6;
@@ -105,7 +109,7 @@ for col_ind = 1:N_cols
             rTCR_hist(2);
 
         % bar plot:
-        bar(rr2, rTCR_hist2,1,'FaceColor',[1.0, 0.5, 0],...
+        bar(rr2, rTCR_hist2,1,'FaceColor',pTCR_color,...
             'EdgeColor','none')    
         %% mark Exp and Mean %%%%%%%%%%%%%%%%%%%%
         % rTCR_Exp:
@@ -177,7 +181,7 @@ for col_ind = 1:N_cols
             rTCR_hist(2);
         
         % bar plot:
-        bar(rr2, rTCR_hist2,1,'FaceColor',[1.0, 0.5, 0],...
+        bar(rr2, rTCR_hist2,1,'FaceColor',pTCR_color,...
             'EdgeColor','none')    
         %% mark Exp and Mean %%%%%%%%%%%%%%%%%%%%
         % rTCR_Exp:

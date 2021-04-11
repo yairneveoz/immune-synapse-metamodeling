@@ -20,8 +20,8 @@ Output:
 Nc = 64;
 % orange_blue_colormap = orangeBlueColormap(Nc);
 % orange_gray_colormap = orangeGrayColormap(Nc);
-% orange_fixed_colormap = orangeFixedColormap(Nc);
-magenta_fixed_colormap = magentaFixedColormap(Nc);
+orange_fixed_colormap = orangeFixedColormap(Nc);
+% magenta_fixed_colormap = magentaFixedColormap(Nc);
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 N_cols = 5;
@@ -148,7 +148,8 @@ for col_ind = 1:N_cols
         view(2)
         h2.EdgeColor = 'none';
         h2.FaceAlpha = 1.0;
-        colormap(magenta_fixed_colormap)
+%         colormap(magenta_fixed_colormap)
+        colormap(orange_fixed_colormap)
         alpha color
         alpha scaled
         axis equal

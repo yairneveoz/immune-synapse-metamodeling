@@ -14,14 +14,15 @@ Output:
 %}
 %
 %% colors and colormaps: %%%%%%%%%%%%%%
-TCR_color = [0.0, 0.6, 0.0];
-CD45_color = [1.0, 0.0, 0.0];
+% TCR_color = [0.0, 0.6, 0.0];
+% CD45_color = [1.0, 0.0, 0.0];
 
 Nc = 64;
-orange_fixed_colormap = orangeFixedColormap(Nc);
-green_fixed_colormap = greenFixedColormap(Nc);
+magenta_fixed_colormap = magentaFixedColormap(Nc);
+% orange_fixed_colormap = orangeFixedColormap(Nc);
+% green_fixed_colormap = greenFixedColormap(Nc);
 % orange_gray_colormap = orangeGrayColormap(Nc);
-parula_gray_colormap = parulaGrayColormap(Nc);
+% parula_gray_colormap = parulaGrayColormap(Nc);
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 N_cols = 5;
@@ -159,8 +160,8 @@ for col_ind = 1:N_cols
         view(2)
         h2.EdgeColor = 'none';
         h2.FaceAlpha = 1.0;
-%         colormap(parula_gray_colormap)
-        colormap(orange_fixed_colormap)
+        colormap(magenta_fixed_colormap)
+%         colormap(orange_fixed_colormap)
         alpha color
         alpha scaled
         axis equal
