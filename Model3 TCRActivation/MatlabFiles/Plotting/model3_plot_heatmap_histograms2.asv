@@ -12,11 +12,12 @@ rTCR_hist_model3(isnan(rTCR_hist_model3)) = 0;
 
 %% rTCR histogram negative Dep:
 rTCR_hist_model3_negativeDep_3D = load('rTCR_hist_model3_negativeDep');
-rTCR_hist_model3 = ...
-    rTCR_hist_model3_3D.dep_decay_rTCR_normalized_counts;
+rTCR_hist_model3_negativeDep = ...
+    rTCR_hist_model3_negativeDep_3D.dep_decay_rTCR_normalized_counts;
 
 % asign NaN to 0:
-rTCR_hist_model3(isnan(rTCR_hist_model3)) = 0;
+rTCR_hist_model3_negativeDep(...
+    isnan(rTCR_hist_model3_negativeDep)) = 0;
 
 %% calculate heatmaps:
 [rTCR_mean_array,rTCR_Exp_array] = ...
@@ -158,7 +159,7 @@ if vertical_heatmaps
         hold off
     end
 end
-
+%
 %% horizontal heatmaps %%%%%%%%%%%%%%%%
 if horizontal_heatmaps
     figure(19)
@@ -173,12 +174,13 @@ if horizontal_heatmaps
     pos1 = ([o1x, o1y, s1x, s1y]);
     h1 = subplot('Position',pos1);
 
-    pcolor(10*rTCR_Exp_array)
+    p1 = pcolor(10*rTCR_Exp_array);
+    p1.edge
     colorbar
     hold on
     [~,c1] = contour(10*rTCR_Exp_array);
     hold off
-    c1.LineColor = [1, 1, 1];
+    c1.LineColor = 0*[1, 1, 1];
     caxis([0 250])
     title('Mean radial distance')
     xlabel('Decay length (nm)')

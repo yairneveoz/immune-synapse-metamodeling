@@ -159,7 +159,7 @@ if vertical_heatmaps
         hold off
     end
 end
-
+%
 %% horizontal heatmaps %%%%%%%%%%%%%%%%
 if horizontal_heatmaps
     figure(19)
@@ -174,12 +174,13 @@ if horizontal_heatmaps
     pos1 = ([o1x, o1y, s1x, s1y]);
     h1 = subplot('Position',pos1);
 
-    pcolor(10*rTCR_Exp_array)
+    p1 = pcolor(10*rTCR_Exp_array);
+    p1.EdgeColor = 'none';
     colorbar
     hold on
     [~,c1] = contour(10*rTCR_Exp_array);
     hold off
-    c1.LineColor = [1, 1, 1];
+    c1.LineColor = 0*[1, 1, 1];
     caxis([0 250])
     title('Mean radial distance')
     xlabel('Decay length (nm)')
@@ -215,12 +216,13 @@ if horizontal_heatmaps
     pos2 = ([o2x, o2y, s2x, s2y]);
     h2 = subplot('Position',pos2);
 
-    pcolor(10*rTCR_mean_array)
+    p2 = pcolor(10*rTCR_mean_array);
+    p2.EdgeColor = 'none';
     colorbar
     hold on
     [~,c1] = contour(10*rTCR_mean_array);
     hold off
-    c1.LineColor = [1, 1, 1];
+    c1.LineColor = 0*[1, 1, 1];
     caxis([0 0.45])
     title('Mean relative TCR*')
     xlabel('Decay length (nm)')
