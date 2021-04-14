@@ -80,6 +80,7 @@ set(gcf, 'Units', 'pixels',...
     
 axis_off = 1;
 lim1 = 30; % 100
+tick1 = 25; 
 max_h = 0.12;
 
 for col_ind = 1:N_cols
@@ -133,14 +134,10 @@ for col_ind = 1:N_cols
 
         hold off
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%         text(-27,0.05,iname,'FontWeight', 'Bold')
         xlim([-lim1 lim1])
-    %     xlim([-30 30])
         ylim([0 max_h])
-    %     xticks([-30:10:30]);
-    %     xticklabels(10*[-30:10:30])
-        xticks([-25:25:25]);
-        xticklabels(10*[-25:25:25])
+        xticks([-tick1:tick1:tick1]);
+        xticklabels(10*[-tick1:tick1:tick1])
 
         %%
         if axis_off

@@ -263,6 +263,12 @@ model3plotAllSubplots()
 %% plot clouds array: %%%%%%%%%%%%%%%%%
 model3plotCloudsArray()
 %
+%% plot TCR phos cloud array: %%%%%%%%%
+model3plotTCRphosCloudsArray()
+%
+%% plot TCRphos Cross Section: %%%%%%%%
+model3plotTCRphosCrossSection()
+%
 %% plot TCR phos array: %%%%%%%%%%%%%%%
 model3plotTCRphosArray()
 %
