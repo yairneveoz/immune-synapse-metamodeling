@@ -256,21 +256,25 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 N_rows = 6;
 N_cols = 5;
-
+%%
+model3_plot_Array_Parameters;
 %% plot all subplots: %%%%%%%%%%%%%%%%%
-model3plotAllSubplots()
+model3plotAllSubplots(parameters)
 %
 %% plot clouds array: %%%%%%%%%%%%%%%%%
-model3plotCloudsArray()
+% figure(13)
+model3plotCloudsArray(parameters)
 %
 %% plot TCR phos cloud array: %%%%%%%%%
-model3plotTCRphosCloudsArray()
+% figure(14)
+model3plotTCRphosCloudsArray(parameters)
 %
 %% plot TCRphos Cross Section: %%%%%%%%
-model3plotTCRphosCrossSection()
+% figure(15)
+model3plotTCRphosCrossSection(parameters)
 %
 %% plot TCR phos array: %%%%%%%%%%%%%%%
-model3plotTCRphosArray()
+model3plotTCRphosArray() % parameters
 %
 %% plot TCR phos histogram array: %%%%%
 model3plotTCRphosHistArray(rTCR_hist_model3,...

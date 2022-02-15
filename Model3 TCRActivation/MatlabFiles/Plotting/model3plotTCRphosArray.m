@@ -1,4 +1,4 @@
-function model3plotTCRphosArray()
+function model3plotTCRphosArray(parameters)
 
 %% doc: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %{
@@ -14,74 +14,83 @@ Output:
 %}
 %
 %% colors and colormaps: %%%%%%%%%%%%%%
-% TCR_color = [0.0, 0.6, 0.0];
-% CD45_color = [1.0, 0.0, 0.0];
+TCR_color = parameters.TCR.color;
+CD45_color = parameters.CD45.color;
 
-Nc = 64;
-magenta_fixed_colormap = magentaFixedColormap(Nc);
-% orange_fixed_colormap = orangeFixedColormap(Nc);
-% green_fixed_colormap = greenFixedColormap(Nc);
-% orange_gray_colormap = orangeGrayColormap(Nc);
-% parula_gray_colormap = parulaGrayColormap(Nc);
+orange_fixed_colormap = parameters.colormaps.orange_fixed;
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-N_cols = 5;
-N_rows = 6;
-
 % subplots and gaps sizes (relative to the figure size):
-gapx0 = 0.12; % relative initial gap on the left.
-gapy0 = 0.125; % relative initial gap on the bottom.
-gapx = 0.02; % relative gap x between subplots.
-gapy = 0.02; % relative gap x between subplots.
-size_x = 0.75/N_cols; % relative subplots x size.
-size_y = 0.75/N_rows; % relative subplots y size.
+N_cols = parameters.plots.N_cols;
+N_rows = parameters.plots.N_rows;
+
+gapx0 = parameters.plots.gapx0; % relative initial gap on the left.
+gapy0 = parameters.plots.gapy0; % relative initial gap on the bottom.
+gapx = parameters.plots.gapx; % relative gap x between subplots.
+gapy = parameters.plots.gapy; % relative gap x between subplots.
+size_x = parameters.plots.size_x; % relative subplots x size.
+size_y = parameters.plots.size_y; % relative subplots y size.
 
 % origins of the individual subplots:
-origins_x = gapx0 + (size_x+gapx)*[0:N_cols-1];
-origins_y = gapy0 + (size_y+gapy)*[0:N_rows-1];
-
+origins_x = gapx0 + (size_x + gapx)*[0:N_cols-1];
+origins_y = gapy0 + (size_y + gapy)*[0:N_rows-1];
 %
-%% array sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-array_size_x_microns = 2;
-array_size_y_microns = 2;
+%% array sizes: %%%%%%%%%%%%%%%%%%%%%%%
+array_size_x_microns = parameters.arrays.size_x_microns;
+array_size_y_microns = parameters.arrays.size_y_microns;
 
-array_size_x_pixels = array_size_x_microns*100;
-array_size_y_pixels = array_size_y_microns*100;
+pixel_size_nm = parameters.arrays.pixel_size_nm; % nm
+mic2nm = parameters.arrays.mic2nm;
+
+array_size_x_pixels = array_size_x_microns*mic2nm/pixel_size_nm;
+array_size_y_pixels = array_size_y_microns*mic2nm/pixel_size_nm;
+
+shift_x_pixels = ceil(array_size_x_pixels/2);
+shift_y_pixels = ceil(array_size_y_pixels/2);
 %
-%% TCR_locations %%%%%%%%%%%%%%%%%%%%%%
-TCR_cluster_density = 1000;
-TCR_r1 = 0;
-TCR_r2 = 0.25; % microns
-pixel_size = 10; % nm
+%% molecules parameters: %%%%%%%%%%%%%%
+% TCR:
+TCR_cluster_density = parameters.TCR.cluster_density;
+TCR_r1_microns = parameters.TCR.r1_microns;
+TCR_r2_microns = parameters.TCR.r2_microns; % microns
+
+% CD45:
+CD45_cluster_density = parameters.CD45.cluster_density; % #/micron^2
+CD45_decay_length_nm = parameters.CD45.decay_length_nm; 
+CD45_width_microns1 = parameters.CD45.width_microns; % ring width
+CD45_width_microns2 = parameters.CD45.width_microns2; % ring width
 
 %%% create TCR locations: %%%%%%%%%%%%%
 [TCR_x_pixels0,TCR_y_pixels0] = radialDistributionArray(...
-    TCR_cluster_density,TCR_r1,TCR_r2,pixel_size,...
+    TCR_cluster_density,TCR_r1_microns,TCR_r2_microns,pixel_size_nm,...
     array_size_x_microns,array_size_y_microns);
 
 TCR_x_pixels = TCR_x_pixels0 - array_size_x_pixels/2;
 TCR_y_pixels = TCR_y_pixels0 - array_size_y_pixels/2;
-
-%% start subplots loops: %%%%%%%%%%%%%%
-depletions = [-250,0:10:200];
-decayLengths = 10:10:200;
-
-% selected indices to plot as subplots:
-s_dep_ind = [1,2:5:22]; % selected, N = N_rows
-s_dec_ind = [2,5,10,15,20]; % selected, N = N_cols
-
-%% plot clouds: %%%%%%%%%%%%%%%%%%%%%%%
+%
+%% plot TCR and CD45 locations: %%%%%%%
 figure(14)
 clf
 set(gcf, 'Units', 'pixels',...
-        'OuterPosition', [500, 50, 700, 800]);
+        'OuterPosition', [400, 50, 700, 800]);
     
-axis_off = 1;
-R_max = ceil(array_size_x_pixels/2);
-CD45_decay_length_nm = 10;
-lim1 = 30; % 100
-shift_x = 100; % pixels
-shift_y = 100; % pixels
+lim1 = parameters.plots.lim1; % pixels
+tick1 = parameters.plots.tick1; % pixels
+lim2 = parameters.plots.lim2; % pixels
+tick2 = parameters.plots.tick2; % pixels
+
+depletions = parameters.plots.depletions;
+decayLengths = parameters.plots.decayLengths;
+
+% selected indices to plot as subplots:
+s_dep_ind = parameters.plots.s_dep_ind; % selected, N = N_rows
+s_dec_ind = parameters.plots.s_dec_ind; % selected, N = N_cols
+
+axis_off = parameters.plots.axis_off;
+R_max = ceil(array_size_x_pixels/1);
+%
+%% start subplots loops: %%%%%%%%%%%%%%
+
 
 for col_ind = 1:N_cols
     for row_ind = 1:N_rows
@@ -105,9 +114,13 @@ for col_ind = 1:N_cols
         %% CD45: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         depletion_range_nm = depletions(idep);
 
-        CD45_cluster_density = 1000;
-        CD45_r1 = TCR_r2 + depletion_range_nm/1000; % nm
-        CD45_r2 = CD45_r1 + 0.3; % nm 0.3
+        if row_ind == 1
+            CD45_width_microns = CD45_width_microns2;
+        else
+            CD45_width_microns = CD45_width_microns1;
+        end
+        CD45_r1_microns = TCR_r2_microns + depletion_range_nm/mic2nm; % nm
+        CD45_r2_microns = CD45_r1_microns + CD45_width_microns; % nm 0.3
 
         [CD45_x_pixels0,CD45_y_pixels0] = radialDistributionArray(...
             CD45_cluster_density,CD45_r1,CD45_r2,pixel_size,...
@@ -160,16 +173,16 @@ for col_ind = 1:N_cols
         view(2)
         h2.EdgeColor = 'none';
         h2.FaceAlpha = 1.0;
-        colormap(magenta_fixed_colormap)
-%         colormap(orange_fixed_colormap)
+%         colormap(magenta_fixed_colormap)
+        colormap(orange_fixed_colormap)
         alpha color
         alpha scaled
         axis equal
         axis(shift_x + [-lim1 lim1 -lim1 lim1])
-        xticks(shift_x + [-50:50:50])
-        yticks(shift_y + [-50:50:50])
-        xticklabels({10*[-50:50:50]})
-        yticklabels({10*[-50:50:50]})
+        xticks(shift_x + [-tick1:tick1:tick1])
+        yticks(shift_y + [-tick1:tick1:tick1])
+        xticklabels({pixel_size_nm*[-tick1:tick1:tick1]})
+        yticklabels({pixel_size_nm*[-tick1:tick1:tick1]})
     %     xlabel('x(nm)')
     %     ylabel('y(nm)')
         %%

@@ -1,4 +1,4 @@
-function model3plotTCRphosCloudsArray()
+function model3plotTCRphosCloudsArray(parameters)
 
 %% doc: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %{
@@ -14,82 +14,90 @@ Output:
 %}
 %
 %% colors and colormaps: %%%%%%%%%%%%%%
-Nc = 64;
-% orange_blue_colormap = orangeBlueColormap(Nc);
-% orange_gray_colormap = orangeGrayColormap(Nc);
-% orange_fixed_colormap = orangeFixedColormap(Nc);
-magenta_fixed_colormap = magentaFixedColormap(Nc);
+TCR_color = parameters.TCR.color;
+CD45_color = parameters.CD45.color;
+
+magenta_fixed_colormap = parameters.colormaps.magenta_fixed;
+orange_fixed_colormap = parameters.colormaps.orange_fixed;
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-N_cols = 5;
-N_rows = 6;
-
 % subplots and gaps sizes (relative to the figure size):
-gapx0 = 0.12; % relative initial gap on the left.
-gapy0 = 0.125; % relative initial gap on the bottom.
-gapx = 0.015; % relative gap x between subplots.
-gapy = 0.02; % relative gap x between subplots.
-size_x = 0.75/N_cols; % relative subplots x size.
-size_y = 0.75/N_rows; % relative subplots y size.
+N_cols = parameters.plots.N_cols;
+N_rows = parameters.plots.N_rows;
+
+gapx0 = parameters.plots.gapx0; % relative initial gap on the left.
+gapy0 = parameters.plots.gapy0; % relative initial gap on the bottom.
+gapx = parameters.plots.gapx; % relative gap x between subplots.
+gapy = parameters.plots.gapy; % relative gap x between subplots.
+size_x = parameters.plots.size_x; % relative subplots x size.
+size_y = parameters.plots.size_y; % relative subplots y size.
 
 % origins of the individual subplots:
 origins_x = gapx0 + (size_x + gapx)*[0:N_cols-1];
 origins_y = gapy0 + (size_y + gapy)*[0:N_rows-1];
-
 %
-%% array sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-MU2NM = 1000; % microns to nm.
-pixel_size_nm = 10; % nm
+%% array sizes: %%%%%%%%%%%%%%%%%%%%%%%
+array_size_x_microns = parameters.arrays.size_x_microns;
+array_size_y_microns = parameters.arrays.size_y_microns;
 
-array_size_x_microns = 2;
-array_size_y_microns = 2;
+pixel_size_nm = parameters.arrays.pixel_size_nm; % nm
+mic2nm = parameters.arrays.mic2nm;
 
-array_size_x_pixels = array_size_x_microns*MU2NM/pixel_size_nm;
-array_size_y_pixels = array_size_y_microns*MU2NM/pixel_size_nm;
+array_size_x_pixels = array_size_x_microns*mic2nm/pixel_size_nm;
+array_size_y_pixels = array_size_y_microns*mic2nm/pixel_size_nm;
+
+shift_x_pixels = ceil(array_size_x_pixels/2);
+shift_y_pixels = ceil(array_size_y_pixels/2);
 %
-%% TCR_locations %%%%%%%%%%%%%%%%%%%%%%
-% TCR_cluster_density = 1000; % #/microns^2
-% TCR_r1_microns = 0;
-TCR_r2_microns = 0.25; % microns
-TCR_r2_pixels = TCR_r2_microns*MU2NM/pixel_size_nm;
+%% molecules parameters: %%%%%%%%%%%%%%
+% TCR:
+TCR_cluster_density = parameters.TCR.cluster_density;
+TCR_r1_microns = parameters.TCR.r1_microns;
+TCR_r2_microns = parameters.TCR.r2_microns; % microns
+
+TCR_r2_pixels = 1 + TCR_r2_microns*mic2nm/pixel_size_nm;
+% CD45:
+CD45_cluster_density = parameters.CD45.cluster_density; % #/micron^2
+CD45_decay_length_nm = parameters.CD45.decay_length_nm; 
+CD45_width_microns1 = parameters.CD45.width_microns; % ring width
+CD45_width_microns2 = parameters.CD45.width_microns2; % ring width
 
 %%% create TCR locations: %%%%%%%%%%%%%
-% [TCR_x_pixels0,TCR_y_pixels0] = radialDistributionArray(...
-%     TCR_cluster_density,TCR_r1,TCR_r2,pixel_size,...
-%     array_size_x_microns,array_size_y_microns);
+[TCR_x_pixels0,TCR_y_pixels0] = radialDistributionArray(...
+    TCR_cluster_density,TCR_r1_microns,TCR_r2_microns,pixel_size_nm,...
+    array_size_x_microns,array_size_y_microns);
 
-% TCR_x_pixels = TCR_x_pixels0 - 100*array_size_x_microns/2;
-% TCR_y_pixels = TCR_y_pixels0 - 100*array_size_y_microns/2;
+TCR_x_pixels = TCR_x_pixels0 - array_size_x_pixels/2;
+TCR_y_pixels = TCR_y_pixels0 - array_size_y_pixels/2;
 
-%% start subplots loops: %%%%%%%%%%%%%%
-N_rows = 6;
-N_cols = 5;
 
-depletions = [-250,0:10:200];
-decayLengths = 10:10:200;
-
-% selected indices to plot as subplots:
-s_dep_ind = [1,2:5:22]; % selected, N = N_rows
-s_dec_ind = [2,5,10,15,20]; % selected, N = N_cols
-
-%% plot clouds: %%%%%%%%%%%%%%%%%%%%%%%
-figure(16)
+%
+%% plot TCR and CD45 locations: %%%%%%%
+figure(14)
 clf
 set(gcf, 'Units', 'pixels',...
-        'OuterPosition', [450, 50, 700, 800]);
+        'OuterPosition', [400, 50, 700, 800]);
     
-axis_off = 1;
-R_max = ceil(array_size_x_pixels/2);
-CD45_decay_length_nm = 10;
-lim1 = 30; % pixels
-tick1 = 25; % pixels
-shift_x = 100; % pixels
-shift_y = 100; % pixels
-CD45_cluster_density = 1000;
+lim1 = parameters.plots.lim1; % pixels
+tick1 = parameters.plots.tick1; % pixels
+lim2 = parameters.plots.lim1; % pixels
+tick2 = parameters.plots.tick2; % pixels
 
-x = -ceil((array_size_x_pixels/2))+1:1:ceil((array_size_x_pixels/2));
-y = -ceil((array_size_y_pixels/2))+1:1:ceil((array_size_y_pixels/2));
-[X,Y] = meshgrid(x,y);
+depletions = parameters.plots.depletions;
+decayLengths = parameters.plots.decayLengths;
+
+% selected indices to plot as subplots:
+s_dep_ind = parameters.plots.s_dep_ind; % selected, N = N_rows
+s_dec_ind = parameters.plots.s_dec_ind; % selected, N = N_cols
+
+axis_off = parameters.plots.axis_off;
+R_max = ceil(array_size_x_pixels/2);
+%
+%% start subplots loops: %%%%%%%%%%%%%%
+
+x_pixels = -ceil((array_size_x_pixels/2))+1:1:ceil((array_size_x_pixels/2));
+y_pixels = -ceil((array_size_y_pixels/2))+1:1:ceil((array_size_y_pixels/2));
+[X_pixels,Y_pixels] = meshgrid(x_pixels,y_pixels);
 
 
 for col_ind = 1:N_cols
@@ -114,12 +122,17 @@ for col_ind = 1:N_cols
         %% CD45: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         depletion_range_nm = depletions(idep);
 
+        if row_ind == 1
+            CD45_width_microns = CD45_width_microns2;
+        else
+            CD45_width_microns = CD45_width_microns1;
+        end
         
-        CD45_r1 = TCR_r2_microns + depletion_range_nm/MU2NM; % nm
-        CD45_r2 = CD45_r1 + 0.3; % nm 0.3
+        CD45_r1_microns = TCR_r2_microns + depletion_range_nm/mic2nm; % nm
+        CD45_r2_microns = CD45_r1_microns + CD45_width_microns; % nm 0.3
 
         [CD45_x_pixels0,CD45_y_pixels0] = radialDistributionArray(...
-            CD45_cluster_density,CD45_r1,CD45_r2,pixel_size_nm,...
+            CD45_cluster_density,CD45_r1_microns,CD45_r2_microns,pixel_size_nm,...
             array_size_x_microns,array_size_y_microns);
 
         %% calculate clouds (phosphorylation probability)
@@ -149,23 +162,25 @@ for col_ind = 1:N_cols
 
         % crop decay_probability_array to TCR
         TCRphos_clouds_array = decay_probability_array;
-        TCRphos_clouds_array(X.^2 + Y.^2 > TCR_r2_pixels^2) = 0;
+        TCRphos_clouds_array(X_pixels.^2 + Y_pixels.^2 > TCR_r2_pixels^2) = 0;
         %
         %% plot clouds: %%%%%%%%%%%%%%%%%%%
         h2 = surf(TCRphos_clouds_array);
         view(2)
         h2.EdgeColor = 'none';
         h2.FaceAlpha = 1.0;
-        colormap(magenta_fixed_colormap)
+%         colormap(magenta_fixed_colormap)
+        colormap(orange_fixed_colormap)
+        parameters.colormaps.orange_fixed
         alpha color
         alpha scaled
         axis equal
 
-        axis(shift_x + [-lim1 lim1 -lim1 lim1])
-        xticks(shift_x + [-tick1:tick1:tick1])
-        yticks(shift_y + [-tick1:tick1:tick1])
-        xticklabels({pixel_size_nm*[-tick1:tick1:tick1]})
-        yticklabels({pixel_size_nm*[-tick1:tick1:tick1]})
+        axis(shift_x_pixels + [-lim2 lim2 -lim2 lim2])
+        xticks(shift_x_pixels + [-tick2:tick2:tick2])
+        yticks(shift_y_pixels + [-tick2:tick2:tick2])
+        xticklabels({pixel_size_nm*[-tick2:tick2:tick2]})
+        yticklabels({pixel_size_nm*[-tick2:tick2:tick2]})
     %     xlabel('x(nm)')
     %     ylabel('y(nm)')
         %%

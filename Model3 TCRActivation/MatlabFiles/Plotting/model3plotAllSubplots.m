@@ -1,4 +1,4 @@
-function model3plotAllSubplots()
+function model3plotAllSubplots(parameters)
 
 %% doc: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %{
@@ -12,76 +12,80 @@ Calls: orangeGrayColormap,
 Output:
 
 %}
+
 %
 %% colors and colormaps: %%%%%%%%%%%%%%
-TCR_color = [0.0, 0.6, 0.0];
-CD45_color = [1.0, 0.0, 0.0];
-
-% orange_gray_colormap = orangeGrayColormap();
-% parula_gray_colormap = parulaGrayColormap();
+TCR_color = parameters.TCR.color;
+CD45_color = parameters.CD45.color;
 %
 %% sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-N_cols = 5;
-N_rows = 6;
-
 % subplots and gaps sizes (relative to the figure size):
-gapx0 = 0.12; % relative initial gap on the left.
-gapy0 = 0.125; % relative initial gap on the bottom.
-gapx = 0.02; % relative gap x between subplots.
-gapy = 0.02; % relative gap x between subplots.
-size_x = 0.75/N_cols; % relative subplots x size.
-size_y = 0.75/N_rows; % relative subplots y size.
+N_cols = parameters.plots.N_cols;
+N_rows = parameters.plots.N_rows;
+
+gapx0 = parameters.plots.gapx0; % relative initial gap on the left.
+gapy0 = parameters.plots.gapy0; % relative initial gap on the bottom.
+gapx = parameters.plots.gapx; % relative gap x between subplots.
+gapy = parameters.plots.gapy; % relative gap x between subplots.
+size_x = parameters.plots.size_x; % relative subplots x size.
+size_y = parameters.plots.size_y; % relative subplots y size.
 
 % origins of the individual subplots:
 origins_x = gapx0 + (size_x + gapx)*[0:N_cols-1];
 origins_y = gapy0 + (size_y + gapy)*[0:N_rows-1];
-
 %
-%% array sizes: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-array_size_x_microns = 2;
-array_size_y_microns = 2;
+%% array sizes: %%%%%%%%%%%%%%%%%%%%%%%
+array_size_x_microns = parameters.arrays.size_x_microns;
+array_size_y_microns = parameters.arrays.size_y_microns;
 
-pixel_size = 10; % nm
+pixel_size_nm = parameters.arrays.pixel_size_nm; % nm
+mic2nm = parameters.arrays.mic2nm;
 
-array_size_x_pixels = array_size_x_microns*100;
-array_size_y_pixels = array_size_y_microns*100;
+array_size_x_pixels = array_size_x_microns*mic2nm/pixel_size_nm;
+array_size_y_pixels = array_size_y_microns*mic2nm/pixel_size_nm;
 %
-%% TCR_locations %%%%%%%%%%%%%%%%%%%%%%
-TCR_cluster_density = 1000;
-TCR_r1 = 0;
-TCR_r2 = 0.25; % microns
+%% molecules parameters: %%%%%%%%%%%%%%
+% TCR:
+TCR_cluster_density = parameters.TCR.cluster_density;
+TCR_r1_microns = parameters.TCR.r1_microns;
+TCR_r2_microns = parameters.TCR.r2_microns; % microns
+
+% CD45:
+CD45_cluster_density = parameters.CD45.cluster_density; % #/micron^2
+CD45_decay_length_nm = parameters.CD45.decay_length_nm; 
+CD45_width_microns1 = parameters.CD45.width_microns; % ring width
+CD45_width_microns2 = parameters.CD45.width_microns2; % ring width
 
 %%% create TCR locations: %%%%%%%%%%%%%
 [TCR_x_pixels0,TCR_y_pixels0] = radialDistributionArray(...
-    TCR_cluster_density,TCR_r1,TCR_r2,pixel_size,...
+    TCR_cluster_density,TCR_r1_microns,TCR_r2_microns,pixel_size_nm,...
     array_size_x_microns,array_size_y_microns);
 
 TCR_x_pixels = TCR_x_pixels0 - array_size_x_pixels/2;
 TCR_y_pixels = TCR_y_pixels0 - array_size_y_pixels/2;
-
-%% start subplots loops: %%%%%%%%%%%%%%
-depletions = [-250,0:10:200];
-decayLengths = 10:10:200;
-
-% selected indices to plot as subplots:
-s_dep_ind = [1,2:5:22]; % selected, N = N_rows
-s_dec_ind = [2,5,10,15,20]; % selected, N = N_cols
-
+%
 %% plot TCR and CD45 locations: %%%%%%%
 figure(12)
 clf
 set(gcf, 'Units', 'pixels',...
         'OuterPosition', [300, 50, 700, 800]);
     
-% figure(13)
-% clf
-% set(gcf, 'Units', 'pixels',...
-%         'OuterPosition', [400, 50, 700, 800]);
-    
-axis_off = 1;
+lim1 = parameters.plots.lim1; % pixels
+tick1 = parameters.plots.tick1; % pixels
+lim2 = parameters.plots.lim2; % pixels
+tick2 = parameters.plots.tick2; % pixels
+
+depletions = parameters.plots.depletions;
+decayLengths = parameters.plots.decayLengths;
+
+% selected indices to plot as subplots:
+s_dep_ind = parameters.plots.s_dep_ind; % selected, N = N_rows
+s_dec_ind = parameters.plots.s_dec_ind; % selected, N = N_cols
+
+axis_off = parameters.plots.axis_off;
 R_max = ceil(array_size_x_pixels/2);
-CD45_decay_length_nm = 10;
-lim1 = 60;
+%
+%% start subplots loops: %%%%%%%%%%%%%%
 
 for col_ind = 1:N_cols
     for row_ind = 1:N_rows
@@ -92,9 +96,6 @@ for col_ind = 1:N_cols
 
         idec = s_dec_ind(col_ind);
 
-        % name (letter) of point
-    %     iname = samples_data(s2).name;
-
         pos1 = ([origins_x(col_ind),...
                  origins_y(row_ind),...
                  size_x, size_y]); % N_rows+1 - 
@@ -102,31 +103,34 @@ for col_ind = 1:N_cols
         h1 = subplot('Position',pos1);
 
         %% calculate locations: %%%%%%%%%%%%%%%%%%%%%
-        %% CD45: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %% CD45: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         depletion_range_nm = depletions(idep);
-
-        CD45_cluster_density = 1000;
-        CD45_r1 = TCR_r2 + depletion_range_nm/1000; % nm
-        CD45_r2 = CD45_r1 + 0.3; % nm 0.3
-
+        if row_ind == 1
+            CD45_width_microns = CD45_width_microns2;
+        else
+            CD45_width_microns = CD45_width_microns1;
+        end
+        CD45_r1_microns = TCR_r2_microns + depletion_range_nm/1000; % nm
+        CD45_r2 = CD45_r1_microns + CD45_width_microns; % nm 0.3
+        
         [CD45_x_pixels0,CD45_y_pixels0] = radialDistributionArray(...
-            CD45_cluster_density,CD45_r1,CD45_r2,pixel_size,...
+            CD45_cluster_density,CD45_r1_microns,CD45_r2,pixel_size_nm,...
             array_size_x_microns,array_size_y_microns);
 
-        CD45_x_pixels = CD45_x_pixels0 - 100*array_size_x_microns/2;
-        CD45_y_pixels = CD45_y_pixels0 - 100*array_size_y_microns/2;
+        CD45_x_pixels = CD45_x_pixels0 - array_size_x_pixels/2;
+        CD45_y_pixels = CD45_y_pixels0 - array_size_y_pixels/2;
 
         %% calculate clouds (phosphorylation probability)
         % CD45 decay:
         CD45_decay_disk = decayDisk(...
-            CD45_decay_length_nm,pixel_size,R_max);
+            CD45_decay_length_nm,pixel_size_nm,R_max);
         norm_CD45_decay_disk = CD45_decay_disk/sum(sum(CD45_decay_disk));
 
         %%% aLck decay:
         aLck_decay_length_nm = decayLengths(idec); 
 
         aLck_decay_disk = decayDisk(...
-            aLck_decay_length_nm,pixel_size,R_max);
+            aLck_decay_length_nm,pixel_size_nm,R_max);
         norm_aLck_decay_disk = aLck_decay_disk/sum(sum(aLck_decay_disk));
 
         % sum of decays:
@@ -152,10 +156,10 @@ for col_ind = 1:N_cols
         axis equal
 
         axis([-lim1 lim1 -lim1 lim1])
-        xticks([-50:50:50])
-        yticks([-50:50:50])
-        xticklabels({10*[-50:50:50]})
-        yticklabels({10*[-50:50:50]})
+        xticks([-tick1:tick1:tick1])
+        yticks([-tick1:tick1:tick1])
+        xticklabels({pixel_size_nm*[-tick1:tick1:tick1]})
+        yticklabels({pixel_size_nm*[-tick1:tick1:tick1]})
     %     xlabel('x(nm)')
     %     ylabel('y(nm)')
         %%
@@ -164,31 +168,10 @@ for col_ind = 1:N_cols
             set(gca,'xlabel',[],'ylabel',[])
         end
 
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%
-
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %     text(-lim1*0.9,lim1*0.8,iname,'FontWeight', 'Bold')
-
     %     xticks([]);
     %     yticks([]);
     end
 end
-
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% delete XTickLabels:
-% set([h(1),h(2),h(3),h(4)],'XTickLabel','');
-
-% delete YTickLabels:
-% set([h(6),h(7),h(8),h(9),h(10)],'YTickLabel','');
-
-% yticks([0 0.1 0.2])
-% if ismember(s2,[13,14,15])
-%     xlabel('x(nm)')
-% end
-% if ismember(s2,[1,4,7,10,13])
-%     ylabel('y(nm)')
-% end
 
 end
 
