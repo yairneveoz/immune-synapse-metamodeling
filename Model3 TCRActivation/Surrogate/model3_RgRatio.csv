@@ -1,7 +1,0 @@
-,ID,Type,Short Name,Latex Name,Description,Distribution,Distribution parameters,Units
-0,fp_DL_TCRP3,Free parameter,decaylength,$$DecayLength^{TCRP}$$,DecayLength(nm),Normal,"{'mu': '100.0', 'sd': '50.0'}",$$nm$$
-1,fp_dep_TCRP3,Free parameter,depletion,$$Depletion^{TCRP}$$,Depletion distance between TCR and CD45,Normal,"{'mu': '100.0', 'sd': '50.0'}",$$nm$$
-2,rv_Intercept_RgRatio_TCRP3,Random variable,Intercept,$$RgRatio^{TCRP}_{Intercept}$$,Interception with Z axis,Normal,"{'mu': '1.466', 'sd': '0.5'}",$$-$$
-3,rv_xSlope_RgRatio_TCRP3,Random variable,xSlope,$$RgRatio^{TCRP}_{xSlope}$$,Slope in x direction,Normal,"{'mu': '-0.003', 'sd': '0.1'}",$$-$$
-4,rv_ySlope_RgRatio_TCRP3,Random variable,ySlope,$$RgRatio^{TCRP}_{ySlope}$$,Slope in y direction,Normal,"{'mu': '0.001', 'sd': '0.1'}",$$-$$
-5,rv_output_RgRatio_TCRP3,Random variable,output,$$RgRatio^{TCRP}_{output}$$,RgRatio output,Normal,"{'mu': '1.0', 'sd': '0.5'}",$$nm$$
