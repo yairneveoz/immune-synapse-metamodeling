@@ -1,7 +1,0 @@
-,ID,Type,Short Name,Latex Name,Description,Distribution,Distribution parameters,Units
-0,fp_t_dep_KSEG1,Free parameter,t,$$t^{KSEG}$$,Time,Uniform,"{'lower': '0.0', 'upper': '100.0'}",$$sec$$
-1,fp_k_dep_KSEG1,Free parameter,k,$$\kappa^{KSEG}$$,Membrane rigidity,Uniform,"{'lower': '0.0', 'upper': '100.0'}",$$kTnm^2$$
-2,rv_intercept_dep_KSEG1,Random variable,intercept,$$dep^{KSEG}_{intercepct}$$,Depletion range between TCR and CD45,Normal,"{'mu': '43.137', 'sd': '3.94'}",$$nm$$
-3,rv_tSlope_dep_KSEG1,Random variable,tSlope,$$dep^{KSEG}_{tSlope}$$,Plain slope for t,Normal,"{'mu': '1.249', 'sd': '0.048'}",$$-$$
-4,rv_kSlope_dep_KSEG1,Random variable,kSlope,$$dep^{KSEG}_{kSlope}$$,Plain slope for k,Normal,"{'mu': '0.629', 'sd': '0.048'}",$$-$$
-5,rv_output_dep_KSEG1,Random variable,output,$$dep^{KSEG}_{output}$$,dep output,Normal,"{'mu': 'intercept+tSlope*t+kSlope*k', 'sd': '20.0'}",$$nm$$
