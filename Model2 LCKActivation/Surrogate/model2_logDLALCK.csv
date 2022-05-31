@@ -1,7 +1,0 @@
-,ID,Type,Short Name,Latex Name,Description,Distribution,Distribution parameters,Units
-0,fp_logPoff_logDLALCK_ALCK2,Free parameter,logPoff,$$logPoff^{ALCK}$$,log10 of deactivation probability,Normal,"{'mu': '-4.0', 'sd': '1.0'}",$$-$$
-1,fp_logDiff_logDLALCK_ALCK2,Free parameter,logDiff,$$logDiff^{ALCK}$$,log10 of diffuion coefficient,Normal,"{'mu': '-2.0', 'sd': '1.0'}",$$\mu m^2/sec$$
-2,rv_intercept_logDLALCK_ALCK2,Random variable,intercept,$$decayLength^{ALCK}_{intercepct}$$,Intercept of plain with origin,Normal,"{'mu': '1.972', 'sd': '0.08'}",$$nm^{-1}$$
-3,rv_PoffSlope_logDLALCK_ALCK2,Random variable,PoffSlope,$$decayLength^{ALCK}_{PoffSlope}$$,Plain slope for logPoff,Normal,"{'mu': '-0.28', 'sd': '0.016'}",$$-$$
-4,rv_DiffSlope_logDLALCK_ALCK2,Random variable,DiffSlope,$$decayLength^{ALCK}_{DiffSlope}$$,Plain slope for logDiff,Normal,"{'mu': '0.422', 'sd': '0.033'}",$$-$$
-5,rv_output_logDLALCK_ALCK2,Random variable,output,$$decayLength^{ALCK}_{output}$$,Decay length output,Normal,"{'mu': '2.0', 'sd': '0.5'}",$$nm$$
